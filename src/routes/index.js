@@ -13,6 +13,11 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword";
 // Dashboard
 import Dashboard from "../pages/Dashboard/index";
 
+// Pages
+import IncidentReport from "../pages/Incidents&Reports/IncidentReport";
+import VulnerabilityReport from "../pages/Incidents&Reports/VulnerabilityReport";
+import ChildReport from "../pages/Incidents&Reports/ChildReport";
+
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
   // //profile
@@ -25,6 +30,9 @@ const authProtectedRoutes = [
     exact: true,
     component: <Navigate to="/dashboard" />,
   },
+  { path: "/incident-reports", component: <IncidentReport /> },
+  { path: "/vulnerability-report", component: <VulnerabilityReport /> },
+  { path: "/child-report", component: <ChildReport /> },
 ];
 
 const publicRoutes = [
@@ -32,6 +40,7 @@ const publicRoutes = [
   { path: "/logout", component: <Logout /> },
   { path: "/forgot-password", component: <ForgetPwd /> },
   { path: "/register", component: <Register /> },
+  
 ];
 
 export { authProtectedRoutes, publicRoutes };

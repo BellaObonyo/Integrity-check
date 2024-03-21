@@ -151,13 +151,25 @@ const SidebarContent = props => {
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
-
+            
             <li>
-              <Link to="/incidents" >
-                <i className="bx bx-error-alt"></i>
-                <span>{props.t("Incidents")}</span>
+              <Link to="/#" className="has-arrow ">
+              <i className="bx bx-error-alt"></i>
+              <span>{props.t("Incidents")}</span>
               </Link>
+              <ul className="sub-menu">
+                <li>
+                <Link to="/incident-reports">{props.t("Report Incident")}</Link>
+                </li>
+                <li>
+                <Link to="/vulnerability-report">{props.t("Report Vulnerability")} </Link>
+                </li>
+                <li>
+                  <Link to="/child-report">{props.t("Child Related Cyber Incident")}</Link>
+                </li> 
+              </ul>
             </li>
+
             <li>
               <Link to="/alerts">
                 <i className="bx bxs-bell-ring"></i>
