@@ -1,14 +1,29 @@
 import React from "react";
 
 import { Row, Button, Col,   Container, CardBody, Card, CardTitle, Form, Input, FormFeedback, Label } from "reactstrap";
-
-//redux
-import { Link } from "react-router-dom";
-import withRouter from "components/Common/withRouter";
-
+// Formik validation
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 const IncidentReport = () =>{
 
+  
+  const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
+    // enableReinitialize: true,
+
+    initialValues: {
+      category: '',
+      incidentDescription: '',
+
+    },
+    validationSchema: Yup.object({
+      category: Yup.string().required("Please Select Category"),
+      incidentDescription: Yup.string().required("Please Enter Your Incident Description"),
+    }),
+    onSubmit: (values) => {
+    }
+  });
   return (
     <React.Fragment>
     <div className="page-content">
@@ -18,7 +33,7 @@ const IncidentReport = () =>{
             <Card>
               <CardBody>
                 <CardTitle className="mb-4">Report Incident</CardTitle>
-                <Form>
+                <Form onSubmit={validation.handleSubmit}>                 
                 <Row className="mb-4">
                       <Col sm={12}>
                         <Label for="horizontal-name-Input">Name</Label>
@@ -26,7 +41,7 @@ const IncidentReport = () =>{
                           type="text"
                           className="form-control"
                           id="horizontal-name-Input"
-                          placeholder="Enter Your Name (Optional)"
+                          placeholder="Enter Your Name"
                         />
                       </Col>
                     </Row>
@@ -37,7 +52,7 @@ const IncidentReport = () =>{
                           type="email"
                           className="form-control"
                           id="horizontal-email-Input"
-                          placeholder="Enter Your Email (Optional)"
+                          placeholder="Enter Your Email"
                         />
                       </Col>
                     </Row>
@@ -75,7 +90,15 @@ const IncidentReport = () =>{
                     <Label for="horizontal-category-Input">
                       Category
                     </Label>
-                    <select defaultValue="0" className="form-select">
+                    <Input
+                          type="select"
+                          className="form-control mb-2"
+                          id="horizontal-category-Input"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.category}
+                          invalid={validation.touched.category && !!validation.errors.category}
+                        >  
                         <option value="0">Abusive Content</option>
                         <option value="1">Malicious Code</option>
                         <option value="2">Information Gathering</option>
@@ -105,7 +128,10 @@ const IncidentReport = () =>{
                         <option value="26">Sabotage</option>
                         <option value="27">Technical Vulnerability</option>
                         <option value="28">Other</option>
-                      </select>
+                      </Input>
+                      {validation.touched.category && validation.errors.category && (
+                        <FormFeedback type="invalid">{validation.errors.category}</FormFeedback>
+                      )}
                     </Col>
                   </Row>
 
@@ -118,7 +144,14 @@ const IncidentReport = () =>{
                         type="textarea"
                         id="incidentType"
                         placeholder="Describe and categorize your incident according to your knowledge and understanding."
+                        onChange={validation.handleChange}
+                        onBlur={validation.handleBlur}
+                        value={validation.values.incidentDescription}
+                        invalid={validation.touched.incidentDescription && !!validation.errors.incidentDescription}
                       />
+                        {validation.errors.incidentDescription && validation.touched.incidentDescription && (
+                          <FormFeedback type="invalid">{validation.errors.incidentDescription}</FormFeedback>
+                        )}  
                     </Col>
                   </Row>
 
