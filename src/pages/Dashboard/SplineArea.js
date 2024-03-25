@@ -6,61 +6,73 @@ const Spinearea = ({dataColors}) => {
   const spineareaChartColors = getChartColorsArray(dataColors);
 
   const series = [
+  
     {
-      name: "series1",
-      data: [34, 40, 28, 52, 42, 109, 100],
+      name: "",
+      data: [74, 83, 102, 97, 86, 106, 93, 114, 94, 24, 54, 10],
     },
-    {
-      name: "series2",
-      data: [32, 60, 34, 46, 34, 52, 41],
-    },
-  ]
-
+  
+  ];
   const options = {
     chart: {
-        toolbar: {
-          show: false,
-        },
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "45%",
+        endingShape: "rounded",
+      },
     },
     dataLabels: {
       enabled: false,
     },
     stroke: {
-      curve: "smooth",
-      width: 3,
+      show: true,
+      width: 2,
+      colors: ["transparent"],
     },
 
     colors: spineareaChartColors,
     xaxis: {
-      type: "datetime",
       categories: [
-        "2018-09-19T00:00:00",
-        "2018-09-19T01:30:00",
-        "2018-09-19T02:30:00",
-        "2018-09-19T03:30:00",
-        "2018-09-19T04:30:00",
-        "2018-09-19T05:30:00",
-        "2018-09-19T06:30:00",
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
       ],
+    },
+    yaxis: {
+      show: false, 
     },
     grid: {
       borderColor: "#f1f1f1",
     },
+    fill: {
+      opacity: 1,
+    },
     tooltip: {
-      x: {
-        format: "dd/MM/yy HH:mm",
+      y: {
+        formatter: function (val) {
+          return  val ;
+        },
       },
     },
-  }
+  };
 
   return (
-    <ReactApexChart
-      options={options}
-      series={series}
-      type="area"
-      height="350"
-    />
-  )
-}
+    <ReactApexChart options={options} series={series} type="bar" height={350} />
+  );
+};
 
 export default Spinearea
