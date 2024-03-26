@@ -137,64 +137,50 @@ const data = [
               />
             </Col>
           </Row>
-          <Row>
-        <Col lg="12">
+         
           <Card>
             <CardBody>
-              <Row>
-                <Col lg="4">
-                     <h2>Incidents</h2>                       
-                </Col>
-
-                <Col lg="4" className="align-self-center">
-                  <div className="text-lg-center mt-4 mt-lg-0">
-                    <Row>
-                      <Col xs="4">
-                        <div>
-                        <i className=" bx bx-history"></i>
-
-                          <p className="text-muted text-truncate mb-2">
-                            New
-                          </p>
-                          <h5 className="mb-0">48</h5>
-                        </div>
-                      </Col>
-                      <Col xs="4">
-                        <div>
-                          <p className="text-muted text-truncate mb-2">
-                            Open
-                          </p>
-                          <h5 className="mb-0">40</h5>
-                        </div>
-                      </Col>
-                      <Col xs="4">
-                        <div>
-                          <p className="text-muted text-truncate mb-2">
-                            Closed
-                          </p>
-                          <h5 className="mb-0">18</h5>
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
-                </Col>
-
-              </Row>
+            <Row>
+      <Col xs="2" className="d-flex align-items-center">
+        <h1 className="m-0">Incidents</h1>
+      </Col>
+      <Col xs="2">
+        <div>
+          <i className="bx bx-history"></i>
+          <h5 className="mb-0">48</h5>
+          <p className="text-muted text-truncate mb-2">New</p>
+        </div>
+      </Col>
+      <Col xs="2">
+        <div>
+          <h5 className="mb-0">40</h5>
+          <p className="text-muted text-truncate mb-2">Open</p>
+        </div>
+      </Col>
+      <Col xs="2">
+        <div>
+          <h5 className="mb-0">18</h5>
+          <p className="text-muted text-truncate mb-2">Closed</p>
+        </div>
+      </Col>
+    </Row>
             </CardBody>
           </Card>
-        </Col>
-      </Row>
+        
           <TableContainer
+                    showView
                     columns={columns}
                     data={data}
                     isGlobalFilter={true}
                     isAddOptions={false}
                     customPageSize={10}
                     isPagination={true}
+                    iscustomPageSizeOptions={true}
                     tableClass="align-middle table-nowrap table-check table"
                     theadClass="table-light"
                     paginationDiv="col-12"
-                    pagination="justify-content-center pagination pagination-rounded"
+                    pagination="justify-content-left pagination pagination-rounded"
+
                 />
         </Container>
       </div>

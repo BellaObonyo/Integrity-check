@@ -15,6 +15,7 @@ import Dashboard from "../pages/Dashboard/index";
 
 // Pages
 import IncidentReport from "../pages/Incidents&Reports/IncidentReport";
+import IncidentDetails from "pages/Incidents&Reports/IncidentDetails";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -29,6 +30,7 @@ const authProtectedRoutes = [
     component: <Navigate to="/dashboard" />,
   },
   { path: "/incidents", component: <IncidentReport /> },
+  { path: "/incident-details", component: <IncidentDetails />},
 ];
 
 const publicRoutes = [
