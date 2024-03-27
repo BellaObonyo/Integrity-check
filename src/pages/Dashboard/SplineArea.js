@@ -1,18 +1,16 @@
 import React from "react"
 import ReactApexChart from "react-apexcharts"
-import getChartColorsArray from "../../components/Common/ChartsDynamicColor";
+import getChartColorsArray from "../../components/Common/ChartsDynamicColor"
 
-const Spinearea = ({dataColors}) => {
-  const spineareaChartColors = getChartColorsArray(dataColors);
+const Spinearea = ({ dataColors }) => {
+  const spineareaChartColors = getChartColorsArray(dataColors)
 
   const series = [
-  
     {
       name: "",
       data: [74, 83, 102, 97, 86, 106, 93, 114, 94, 24, 54, 10],
     },
-  
-  ];
+  ]
   const options = {
     chart: {
       toolbar: {
@@ -23,7 +21,6 @@ const Spinearea = ({dataColors}) => {
       bar: {
         horizontal: false,
         columnWidth: "45%",
-        endingShape: "rounded",
       },
     },
     dataLabels: {
@@ -53,7 +50,7 @@ const Spinearea = ({dataColors}) => {
       ],
     },
     yaxis: {
-      show: false, 
+      show: false,
     },
     grid: {
       borderColor: "#f1f1f1",
@@ -64,15 +61,15 @@ const Spinearea = ({dataColors}) => {
     tooltip: {
       y: {
         formatter: function (val) {
-          return  val ;
+          return val
         },
       },
     },
-  };
+  }
 
   return (
     <ReactApexChart options={options} series={series} type="bar" height={350} />
-  );
-};
+  )
+}
 
 export default Spinearea

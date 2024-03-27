@@ -1,15 +1,15 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { Row, Container, Col, Card, CardBody, CardTitle } from "reactstrap";
-import SplineArea from "./SplineArea";
-import BarChart from "./barChart";
-import DonutChart from "./donutchart";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import { withTranslation } from "react-i18next";
+import PropTypes from "prop-types"
+import React from "react"
+import { Row, Container, Col, Card, CardBody, CardTitle } from "reactstrap"
+import SplineArea from "./SplineArea"
+import BarChart from "./barChart"
+import DonutChart from "./donutchart"
+import Breadcrumbs from "../../components/Common/Breadcrumb"
+import { withTranslation } from "react-i18next"
 
-const Dashboard = (props) => {
+const Dashboard = props => {
   //meta title
-  document.title = "Dashboard | SHOFCO - SUN Portal";
+  document.title = "Dashboard | SHOFCO - SUN Portal"
 
   return (
     <React.Fragment>
@@ -116,13 +116,13 @@ const Dashboard = (props) => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
 Dashboard.propTypes = {
   t: PropTypes.any,
   chartsData: PropTypes.any,
   onGetChartsData: PropTypes.func,
-};
+}
 
-export default withTranslation()(Dashboard);
+export default withTranslation()(Dashboard)

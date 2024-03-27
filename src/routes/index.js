@@ -30,7 +30,7 @@ const authProtectedRoutes = [
     component: <Navigate to="/dashboard" />,
   },
   { path: "/incidents", component: <IncidentReport /> },
-  { path: "/incident-details", component: <IncidentDetails />},
+  { path: "/incidents/:id", component: <IncidentDetails />},
 ];
 
 const publicRoutes = [

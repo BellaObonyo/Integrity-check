@@ -8,9 +8,9 @@ import {
   useExpanded,
   usePagination,
 } from "react-table"
-import { Table, Row, Col, Button } from "reactstrap"
+import { Table, Row, Col, Button, UncontrolledTooltip } from "reactstrap"
 import JobListGlobalFilter from "../../components/Common/GlobalSearchFilter"
-import { Link } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 
 // Define a default UI for filtering
 function GlobalFilter({
@@ -58,14 +58,11 @@ function GlobalFilter({
 const TableContainer = ({
   columns,
   data,
+  showView,
+  handleView,
+  rootPath,
   isGlobalFilter,
   isJobListGlobalFilter,
-  isAddOptions,
-  isAddUserList,
-  handleOrderClicks,
-  handleUserClick,
-  handleCustomerClick,
-  isAddCustList,
   customPageSize,
   customPageSizeOptions,
   iscustomPageSizeOptions,
@@ -103,7 +100,7 @@ const TableContainer = ({
         pageSize: customPageSize,
         sortBy: [
           {
-            desc: true,
+            desc: false,
           },
         ],
       },
@@ -114,6 +111,7 @@ const TableContainer = ({
     useExpanded,
     usePagination
   )
+  const navigate = useNavigate();
 
   const generateSortingIndicator = column => {
     return column.isSorted ? (column.isSortedDesc ? " 🔽" : " 🔼") : ""
@@ -123,6 +121,13 @@ const TableContainer = ({
     setPageSize(Number(event.target.value))
   }
 
+  const onView = (record) => {
+    if (handleView) {
+      handleView(record);
+    } else {
+      navigate(`${rootPath || location.pathname}/${record.id}`);
+    }
+  };
   return (
     <Fragment>
       <Row className="mb-2">
@@ -150,51 +155,8 @@ const TableContainer = ({
             isJobListGlobalFilter={isJobListGlobalFilter}
           />
         )}
-        {isAddOptions && (
-          <Col sm="7">
-            <div className="text-sm-end">
-              <Button
-                type="button"
-                color="success"
-                className="btn-rounded  mb-2 me-2"
-                onClick={handleOrderClicks}
-              >
-                <i className="mdi mdi-plus me-1" />
-                Add New Order
-              </Button>
-            </div>
-          </Col>
-        )}
-        {isAddUserList && (
-          <Col sm="7">
-            <div className="text-sm-end">
-              <Button
-                type="button"
-                color="primary"
-                className="btn mb-2 me-2"
-                onClick={handleUserClick}
-              >
-                <i className="mdi mdi-plus-circle-outline me-1" />
-                Create New User
-              </Button>
-            </div>
-          </Col>
-        )}
-        {isAddCustList && (
-          <Col sm="7">
-            <div className="text-sm-end">
-              <Button
-                type="button"
-                color="success"
-                className="btn-rounded mb-2 me-2"
-                onClick={handleCustomerClick}
-              >
-                <i className="mdi mdi-plus me-1" />
-                New Customers
-              </Button>
-            </div>
-          </Col>
-        )}
+   
+    
       </Row>
 
       <div className="table-responsive">
@@ -210,6 +172,11 @@ const TableContainer = ({
                     {/* <Filter column={column} /> */}
                   </th>
                 ))}
+                  <th className={''}>
+                  <div className="m-0">
+                    {""}
+                  </div>
+                </th>
               </tr>
             ))}
           </thead>
@@ -227,6 +194,22 @@ const TableContainer = ({
                         </td>
                       )
                     })}
+                    <td>
+                      <div className="d-flex gap-1">
+                      {
+                          showView && <Button
+                            color="link"
+                            className="p-0 m-0"
+                            onClick={() => onView(row)}
+                          >
+                            <i className=" bx bx-dots-horizontal font-size-18" id="viewtooltip" />
+                            <UncontrolledTooltip placement="top" target="viewtooltip">
+                              View
+                            </UncontrolledTooltip>
+                          </Button>
+                        }
+                      </div>
+                    </td>
                   </tr>
                 </Fragment>
               )
