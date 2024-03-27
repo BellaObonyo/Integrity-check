@@ -46,6 +46,7 @@ const Dashboard = props => {
                   <Row className="mt-3">
                     <Col>
                       <div>
+                        <i className=" bx bx-error"></i>
                         <h4>81</h4>
                         <p>General Incidents</p>
                       </div>
