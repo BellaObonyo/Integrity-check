@@ -38,7 +38,6 @@ const Register = props => {
 
   const {
     isAuthenticated,
-    getCurrentUser,
     register,
     loading,
     registerSuccess,

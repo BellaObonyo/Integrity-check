@@ -1,96 +1,81 @@
-import { loginApi, registerApi } from 'api/auth';
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { StoreContext } from './useStore';
+import { loginApi, registerApi } from "api/auth"
+import { useCallback, useContext, useEffect, useState } from "react"
+import { useMutation, useQueryClient } from "react-query"
+import { StoreContext } from "./useStore"
 
 export const useAuth = () => {
-  const { dispatch, state } = useContext(StoreContext);
-  const queryClient = useQueryClient();
+  const { dispatch, state } = useContext(StoreContext)
+  const queryClient = useQueryClient()
 
-  const setUser = useCallback((data) => {
+  const setUser = useCallback(data => {
     dispatch({
-      type: 'setUser',
+      type: "setUser",
       payload: data,
-    });
-  }, []);
+    })
+  }, [])
 
   const logout = useCallback(() => {
     dispatch({
-      type: 'logout',
-    });
-    window.location = '/';
-  }, []);
+      type: "logout",
+    })
+    window.location = "/"
+  }, [])
 
-  const loginMutation = useMutation((payload) => loginApi(payload), {
-    onSuccess: (res) => {
+  const loginMutation = useMutation(payload => loginApi(payload), {
+    onSuccess: res => {
       dispatch({
-        type: 'loginSuccess',
+        type: "loginSuccess",
         payload: res,
-      });
+      })
     },
     onError: () => {
       dispatch({
-        type: 'loginFail',
-      });
+        type: "loginFail",
+      })
     },
     onSettled: () => {
-      queryClient.invalidateQueries('auth/signin');
+      queryClient.invalidateQueries("auth/login")
     },
-  });
+  })
 
-
-  const registerMutation = useMutation((payload) => registerApi(payload), {
-    onSuccess: (res) => {
+  const registerMutation = useMutation(payload => registerApi(payload), {
+    onSuccess: res => {
       dispatch({
-        type: 'registerSuccess',
+        type: "registerSuccess",
         payload: res,
-      });
+      })
     },
     onError: () => {
       dispatch({
-        type: 'registerFail',
-      });
+        type: "registerFail",
+      })
     },
     onSettled: () => {
-      // queryClient.invalidateQueries('public/um/applicant/register');
+      queryClient.invalidateQueries("auth/signup")
     },
-  });
+  })
 
-
-
-  const login = async (data) => {
+  const login = async data => {
     try {
       dispatch({
-        type: 'login',
-      });
-      await loginMutation.mutateAsync(data);
+        type: "login",
+      })
+      await loginMutation.mutateAsync(data)
     } catch (error) {
       //
     }
-  };
+  }
 
-
-  const register = async (data) => {
+  const register = async data => {
     try {
       dispatch({
-        type: 'register',
-      });
-      await registerMutation.mutateAsync(data);
+        type: "register",
+      })
+      await registerMutation.mutateAsync(data)
     } catch (error) {
       //
     }
-  };
-
-  const getCurrentUser = async (data) => {
-    try {
-      // dispatch({
-      //   type: 'currentUser',
-      // });
-      await currentUserMutation.mutateAsync(data);
-    } catch (error) {
-      //
-    }
-  };
+  }
 
   return {
     user: state.user,
@@ -98,13 +83,11 @@ export const useAuth = () => {
     logout,
     setUser,
     register,
-    getCurrentUser,
     isAuthenticated: state.isAuthenticated,
     loading: state.loading,
     loginError: loginMutation.error,
+    loginSuccess: loginMutation.isSuccess,
     registerSuccess: registerMutation.isSuccess,
-    registrationError: registerMutation.error
-  };
-};
-
-
+    registrationError: registerMutation.error,
+  }
+}
