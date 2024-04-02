@@ -1,8 +1,5 @@
 import { get, post, put } from './utils';
 
-export async function getCurrentUserApi(memberId) {
-    return get(`/um/member/?memberId=${memberId}`);
-}
 
 export async function loginApi(data) {
     return post(`/auth/signin`, data);

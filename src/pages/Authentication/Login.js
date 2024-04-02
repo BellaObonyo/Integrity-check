@@ -42,10 +42,12 @@ const Login = props => {
 
     initialValues: {
       email: "",
+      mobile: "",
       password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
+      mobile: Yup.string().required("Please Enter Mobile"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: values => {
@@ -64,13 +66,7 @@ const Login = props => {
     dispatch(socialLogin(type, props.router.navigate))
   }
 
-  //for facebook and google authentication
-  const socialResponse = type => {
-    signIn(type)
-  }
 
-  //handleTwitterLoginResponse
-  // const twitterResponse = e => {}
 
   return (
     <React.Fragment>

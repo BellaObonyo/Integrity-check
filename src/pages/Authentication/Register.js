@@ -10,6 +10,7 @@ import {
   Label,
   Form,
   FormFeedback,
+  Button,
 } from "reactstrap"
 
 // Formik Validation
@@ -22,7 +23,6 @@ import { registerUser, apiError } from "../../store/actions"
 //redux
 import { useSelector, useDispatch } from "react-redux"
 import { createSelector } from "reselect"
-
 import { useAuth } from "hooks/useAuth"
 
 import { Link, useNavigate } from "react-router-dom"
@@ -30,61 +30,69 @@ import { Link, useNavigate } from "react-router-dom"
 // import images
 import profileImg from "../../assets/images/profile-img.png"
 import logoImg from "../../assets/images/logo.svg"
+import { reset } from "redux-form"
 
 const Register = props => {
   //meta title
   document.title = "Register | CAK Admin Portal"
 
+  const {
+    isAuthenticated,
+    getCurrentUser,
+    register,
+    loading,
+    registerSuccess,
+    registrationError,
+  } = useAuth()
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  const {
-    register,
-    registerError,
-    registerSuccess,
-  } = useAuth()
 
   const validation = useFormik({
     // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      email: "",
-      username: "",
       password: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      dateOfBirth: "",
+      sex: "",
+      preferredLanguage: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      username: Yup.string().required("Please Enter Your Username"),
-      password: Yup.string().required("Please Enter Your Password"),
+      email: Yup.string()
+        .email("Please enter a valid email address")
+        .required("Email is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+      firstName: Yup.string().required("First name is required"),
+      middleName: Yup.string(),
+      lastName: Yup.string().required("Last name is required"),
+      mobile: Yup.string().required("Mobile number is required"),
+      dateOfBirth: Yup.date().required("Date of birth is required"),
+      sex: Yup.string().required("Sex is required"),
+      preferredLanguage: Yup.string(),
     }),
-    onSubmit: values => {
-      dispatch(registerUser(values))
+    onSubmit: async values => {
+      // Format the dateOfBirth field to match the expected format
+      const formattedValues = {
+        ...values,
+        dateOfBirth: new Date(values.dateOfBirth).toISOString(),
+        sex: values.sex.toUpperCase(),
+        preferredLanguage: values.preferredLanguage.toUpperCase(),
+      }
+
+      await register(formattedValues).then(() => {
+        console.log(formattedValues)
+        validation.resetForm()
+      })
     },
   })
-
-  const selectAccountState = state => state.Account
-  const AccountProperties = createSelector(selectAccountState, account => ({
-    user: account.user,
-    registrationError: account.registrationError,
-    success: account.success,
-    // loading: account.loading,
-  }))
-
-  const {
-    user,
-    registrationError,
-    success,
-    // loading
-  } = useSelector(AccountProperties)
-
-  useEffect(() => {
-    dispatch(apiError(""))
-  }, [])
-
-  useEffect(() => {
-    success && setTimeout(() => navigate("/login"), 2000)
-  }, [success])
 
   return (
     <React.Fragment>
@@ -135,103 +143,192 @@ const Register = props => {
                         return false
                       }}
                     >
-                      {user && user ? (
+                      {registerSuccess && (
                         <Alert color="success">
                           Register User Successfully
                         </Alert>
-                      ) : null}
+                      )}
 
-                      {registrationError && registrationError ? (
-                        <Alert color="danger">{registrationError}</Alert>
+                      {registrationError && registrationError.message ? (
+                        <Alert color="danger">
+                          {registrationError.message}
+                        </Alert>
                       ) : null}
 
                       <div className="mb-3">
+                        <Label className="form-label">First Name</Label>
+                        <Input
+                          name="firstName"
+                          value={validation.values.firstName || ""}
+                          type="text"
+                          placeholder="Enter your first name"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.firstName &&
+                            !!validation.errors.firstName
+                          }
+                        />
+                        <FormFeedback>
+                          {validation.errors.firstName}
+                        </FormFeedback>
+                      </div>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Middle Name</Label>
+                        <Input
+                          name="middleName"
+                          value={validation.values.middleName || ""}
+                          type="text"
+                          placeholder="Enter your middle name"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.middleName &&
+                            !!validation.errors.middleName
+                          }
+                        />
+                        <FormFeedback>
+                          {validation.errors.middleName}
+                        </FormFeedback>
+                      </div>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Last Name</Label>
+                        <Input
+                          name="lastName"
+                          value={validation.values.lastName || ""}
+                          type="text"
+                          placeholder="Enter your last name"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.lastName &&
+                            !!validation.errors.lastName
+                          }
+                        />
+                        <FormFeedback>
+                          {validation.errors.lastName}
+                        </FormFeedback>
+                      </div>
+                      <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
-                          id="email"
                           name="email"
                           className="form-control"
-                          placeholder="Enter email"
+                          placeholder="Enter your email address"
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
+                            validation.touched.email &&
+                            !!validation.errors.email
                           }
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-
-                      <div className="mb-3">
-                        <Label className="form-label">Username</Label>
-                        <Input
-                          name="username"
-                          type="text"
-                          placeholder="Enter username"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.username || ""}
-                          invalid={
-                            validation.touched.username &&
-                            validation.errors.username
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.username &&
-                        validation.errors.username ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.username}
-                          </FormFeedback>
-                        ) : null}
+                        <FormFeedback>{validation.errors.email}</FormFeedback>
                       </div>
                       <div className="mb-3">
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
+                          value={validation.values.password || ""}
                           type="password"
                           placeholder="Enter Password"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.password || ""}
                           invalid={
                             validation.touched.password &&
-                            validation.errors.password
-                              ? true
-                              : false
+                            !!validation.errors.password
                           }
                         />
-                        {validation.touched.password &&
-                        validation.errors.password ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.password}
-                          </FormFeedback>
-                        ) : null}
+                        <FormFeedback>
+                          {validation.errors.password}
+                        </FormFeedback>
+                      </div>
+                      <div className="mb-3">
+                        <Label className="form-label">Mobile Number</Label>
+                        <Input
+                          name="mobile"
+                          value={validation.values.mobile || ""}
+                          type="text"
+                          placeholder="Enter your mobile number"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.mobile &&
+                            !!validation.errors.mobile
+                          }
+                        />
+                        <FormFeedback>{validation.errors.mobile}</FormFeedback>
                       </div>
 
-                      <div className="mt-4">
-                        <button
+                      <div className="mb-3">
+                        <Label className="form-label">Date of Birth</Label>
+                        <Input
+                          name="dateOfBirth"
+                          value={validation.values.dateOfBirth || ""}
+                          type="date"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.dateOfBirth &&
+                            !!validation.errors.dateOfBirth
+                          }
+                        />
+                        <FormFeedback>
+                          {validation.errors.dateOfBirth}
+                        </FormFeedback>
+                      </div>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Sex</Label>
+                        <Input
+                          type="select"
+                          name="sex"
+                          value={validation.values.sex || ""}
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.sex && !!validation.errors.sex
+                          }
+                        >
+                          <option value="">Select sex</option>
+                          <option value="male">Male</option>
+                          <option value="female">Female</option>
+                          <option value="other">Other</option>
+                        </Input>
+                        <FormFeedback>{validation.errors.sex}</FormFeedback>
+                      </div>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Preferred Language</Label>
+                        <Input
+                          type="select"
+                          name="preferredLanguage"
+                          value={validation.values.preferredLanguage || ""}
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.preferredLanguage && !!validation.errors.preferredLanguage
+                          }
+                        >
+                          <option value="">Select Preferred Language</option>
+                          <option value="english">English</option>
+                          <option value="kiswahili">Kiswahili</option>
+                        </Input>
+                        <FormFeedback>
+                          {validation.errors.preferredLanguage}
+                        </FormFeedback>
+                      </div>
+                      <div className="mt-3 d-grid">
+                        <Button
+                          block
                           className="btn btn-primary btn-block "
                           type="submit"
                         >
                           Register
-                        </button>
-                      </div>
-
-                      <div className="mt-4 text-center">
-                        <p className="mb-0">
-                          By registering you agree to the CAK{" "}
-                          <Link to="#" className="text-primary">
-                            Terms of Use
-                          </Link>
-                        </p>
+                        </Button>
                       </div>
                       <div className="mt-4 text-center">
                         <p>

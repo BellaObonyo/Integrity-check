@@ -49,7 +49,7 @@ async function customFetch(path, headerOptions) {
       !!localStorage.getItem('sessionToken')
     ) {
       localStorage.removeItem('sessionToken');
-    
+     
       window.location = '/';
     }
     if (res.code === 426) {
@@ -93,6 +93,7 @@ export default customFetch;
 
 export function requestWrapper(method) {
   const request = async (url, data = null, params = {}) => {
+    let convertUrl = `${process.env.REACT_APP_SERVER_URL}${url}`;
 
     let convertParams = params;
     let convertData = data || {};

@@ -1,10 +1,10 @@
-import { loginApi, getCurrentUserApi } from 'api/auth';
+import { loginApi, registerApi } from 'api/auth';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-// import { StoreContext } from './useStore';
+import { StoreContext } from './useStore';
 
 export const useAuth = () => {
-//   const { dispatch, state } = useContext(StoreContext);
+  const { dispatch, state } = useContext(StoreContext);
   const queryClient = useQueryClient();
 
   const setUser = useCallback((data) => {
@@ -39,7 +39,7 @@ export const useAuth = () => {
   });
 
 
-  const registerMutation = useMutation((payload) => requestToJoinApi(payload), {
+  const registerMutation = useMutation((payload) => registerApi(payload), {
     onSuccess: (res) => {
       dispatch({
         type: 'registerSuccess',
@@ -52,26 +52,11 @@ export const useAuth = () => {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries('public/um/applicant/register');
+      // queryClient.invalidateQueries('public/um/applicant/register');
     },
   });
 
-  const currentUserMutation = useMutation((payload) => getCurrentUserApi(payload), {
-    onSuccess: (res) => {
-      dispatch({
-        type: 'currentUserSuccess',
-        payload: res,
-      });
-    },
-    onError: () => {
-      dispatch({
-        type: 'currentUserFail',
-      });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries('auth/signin');
-    },
-  });
+
 
   const login = async (data) => {
     try {

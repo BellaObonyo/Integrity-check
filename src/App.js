@@ -1,30 +1,31 @@
-import PropTypes from 'prop-types';
-import React from "react";
-import { useSelector } from "react-redux";
-import { createSelector } from "reselect";
-import { Routes, Route } from "react-router-dom";
-import { layoutTypes } from "./constants/layout";
+import PropTypes from "prop-types"
+import React from "react"
+import { useSelector } from "react-redux"
+import { createSelector } from "reselect"
+import { Routes, Route } from "react-router-dom"
+import { layoutTypes } from "./constants/layout"
 // Import Routes all
-import { authProtectedRoutes, publicRoutes } from "./routes";
+import { authProtectedRoutes, publicRoutes } from "./routes"
+import ReactQueryProvider from "ReactQueryProvider"
 
 // Import all middleware
-import Authmiddleware from "./routes/route";
+import Authmiddleware from "./routes/route"
 
 // layouts Format
-import VerticalLayout from "./components/VerticalLayout/";
-import HorizontalLayout from "./components/HorizontalLayout/";
-import NonAuthLayout from "./components/NonAuthLayout";
+import VerticalLayout from "./components/VerticalLayout/"
+import HorizontalLayout from "./components/HorizontalLayout/"
+import NonAuthLayout from "./components/NonAuthLayout"
 
 // Import scss
-import "./assets/scss/theme.scss";
+import "./assets/scss/theme.scss"
 
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper";
 
-import fakeBackend from "./helpers/AuthType/fakeBackend";
+import fakeBackend from "./helpers/AuthType/fakeBackend"
 
 // Activating fake backend
-fakeBackend();
+fakeBackend()
 
 // const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_APIKEY,
@@ -40,73 +41,64 @@ fakeBackend();
 // init firebase backend
 // initFirebaseBackend(firebaseConfig);
 
-
-const getLayout = (layoutType) => {
-  let Layout = VerticalLayout;
+const getLayout = layoutType => {
+  let Layout = VerticalLayout
   switch (layoutType) {
     case layoutTypes.VERTICAL:
-      Layout = VerticalLayout;
-      break;
+      Layout = VerticalLayout
+      break
     case layoutTypes.HORIZONTAL:
-      Layout = HorizontalLayout;
-      break;
+      Layout = HorizontalLayout
+      break
     default:
-      break;
+      break
   }
-  return Layout;
-};
+  return Layout
+}
 
 const App = () => {
+  const selectLayoutState = state => state.Layout
+  const LayoutProperties = createSelector(selectLayoutState, layout => ({
+    layoutType: layout.layoutType,
+  }))
 
+  const { layoutType } = useSelector(LayoutProperties)
 
-  const selectLayoutState = (state) => state.Layout;
-  const LayoutProperties = createSelector(
-    selectLayoutState,
-      (layout) => ({
-        layoutType: layout.layoutType,
-      })
-  );
-
-    const {
-      layoutType
-  } = useSelector(LayoutProperties);
-
-  const Layout = getLayout(layoutType);
+  const Layout = getLayout(layoutType)
 
   return (
     <React.Fragment>
-      <Routes>
-        {publicRoutes.map((route, idx) => (
-          <Route
-            path={route.path}
-            element={
-              <NonAuthLayout>
-                {route.component}
-              </NonAuthLayout>
-            }
-            key={idx}
-            exact={true}
-          />
-        ))}
+      <ReactQueryProvider>
+        <Routes>
+          {publicRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={<NonAuthLayout>{route.component}</NonAuthLayout>}
+              key={idx}
+              exact={true}
+            />
+          ))}
 
-        {authProtectedRoutes.map((route, idx) => (
-          <Route
-            path={route.path}
-            element={
-              <Authmiddleware>
-                <Layout>{route.component}</Layout>
-              </Authmiddleware>}
-            key={idx}
-            exact={true}
-          />
-        ))}
-      </Routes>
+          {authProtectedRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              element={
+                <Authmiddleware>
+                  <Layout>{route.component}</Layout>
+                </Authmiddleware>
+              }
+              key={idx}
+              exact={true}
+            />
+          ))}
+        </Routes>
+      </ReactQueryProvider>
     </React.Fragment>
-  );
-};
+  )
+}
 
 App.propTypes = {
-  layout: PropTypes.any
-};
+  layout: PropTypes.any,
+}
 
-export default App;
+export default App
