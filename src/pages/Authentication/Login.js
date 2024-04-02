@@ -54,30 +54,30 @@ const Login = props => {
 
     initialValues: {
       email: "",
-      mobile: "", 
+      mobile: "",
       password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
-      mobile: Yup.string().required("Please Enter Your Mobile"), 
+      mobile: Yup.string().required("Please Enter Your Mobile"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
+
     onSubmit: async values => {
       try {
         await login(values);
-        console.log("loginSuccess:", loginSuccess); // Check if loginSuccess is correctly set
-        console.log("isAuthenticated:", isAuthenticated); // Check the value of isAuthenticated
+        console.log("loginSuccess:", loginSuccess); 
+        console.log("isAuthenticated:", isAuthenticated); 
         if (loginSuccess) {
-          navigate("/dashboard"); 
+          navigate("/register"); 
         } else {
-          console.log("Login not successful"); // Log if login is not successful
+          console.log("Login not successful"); 
         }
       } catch (error) {
         console.error('Error during login:', error);
       }
     },
-    
-    
+
   });
 
   const selectLoginState = state => state.Login;
@@ -187,13 +187,13 @@ const Login = props => {
                           onBlur={validation.handleBlur}
                           invalid={
                             validation.touched.password &&
-                            validation.errors.password
+                              validation.errors.password
                               ? true
                               : false
                           }
                         />
                         {validation.touched.password &&
-                        validation.errors.password ? (
+                          validation.errors.password ? (
                           <FormFeedback type="invalid">
                             {validation.errors.password}
                           </FormFeedback>
