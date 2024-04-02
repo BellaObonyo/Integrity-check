@@ -21,6 +21,8 @@ const Spinearea = ({ dataColors }) => {
       bar: {
         horizontal: false,
         columnWidth: "45%",
+        endingShape: "rounded",
+        borderRadius: 5,
       },
     },
     dataLabels: {
