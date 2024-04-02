@@ -2,7 +2,7 @@ import { get, post, put } from './utils';
 
 
 export async function loginApi(data) {
-    return post(`/auth/signin`, data);
+    return post(`/auth/login`, data);
 }
 
 export async function registerApi(data) {
