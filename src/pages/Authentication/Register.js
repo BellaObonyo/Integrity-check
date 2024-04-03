@@ -89,6 +89,7 @@ const Register = props => {
       await register(formattedValues).then(() => {
         console.log(formattedValues)
         validation.resetForm()
+        navigate('/login')
       })
     },
   })

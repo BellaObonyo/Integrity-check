@@ -1,6 +1,6 @@
-import PropTypes from "prop-types";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types"
+import React from "react"
+import { useNavigate } from "react-router-dom"
 
 import {
   Row,
@@ -13,79 +13,72 @@ import {
   Input,
   FormFeedback,
   Label,
-} from "reactstrap";
+} from "reactstrap"
 
 //redux
-import { useSelector, useDispatch } from "react-redux";
-import { createSelector } from "reselect";
-import { Link } from "react-router-dom";
-import withRouter from "components/Common/withRouter";
-import { useAuth } from "hooks/useAuth";
+import { useSelector, useDispatch } from "react-redux"
+import { createSelector } from "reselect"
+import { Link } from "react-router-dom"
+import withRouter from "components/Common/withRouter"
+import { useAuth } from "hooks/useAuth"
 
 // Formik validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import * as Yup from "yup"
+import { useFormik } from "formik"
 
 // actions
-import { loginUser, socialLogin } from "../../store/actions";
+import { loginUser, socialLogin } from "../../store/actions"
 
 // import images
-import profile from "assets/images/profile-img.png";
-import logo from "assets/images/logo.svg";
+import profile from "assets/images/profile-img.png"
+import logo from "assets/images/logo.svg"
 
 const Login = props => {
   //meta title
-  document.title = "Login | CAK Admin Login";
+  document.title = "Login | CAK Admin Login"
 
-  const {
-    isAuthenticated,
-    login,
-    loading,
-    loginSuccess,
-    loginError,
-  } = useAuth();
+  const { isAuthenticated, login, loading, loginSuccess, loginError } =
+    useAuth()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const validation = useFormik({
     enableReinitialize: true,
-
     initialValues: {
       email: "",
-      mobile: "", 
+      mobile: "",
       password: "",
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please Enter Your Email"),
-      mobile: Yup.string().required("Please Enter Your Mobile"), 
+      mobile: Yup.string().required("Please Enter Your Mobile"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: async values => {
       try {
-        await login(values);
-        console.log("loginSuccess:", loginSuccess); // Check if loginSuccess is correctly set
-        console.log("isAuthenticated:", isAuthenticated); // Check the value of isAuthenticated
-        if (loginSuccess) {
-          navigate("/dashboard"); 
+        const response = await login(values); // Await login request
+        console.log(response); // Log the response
+        
+        // Check if login was successful
+        if (response && response.success) {
+          // Handle successful login, such as redirecting to a dashboard
+          navigate('/dashboard');
         } else {
-          console.log("Login not successful"); // Log if login is not successful
+          // Handle unsuccessful login, display error message
+          // You can set an error state or display an alert
+          console.error("Login failed:", response.error);
         }
       } catch (error) {
-        console.error('Error during login:', error);
+        console.error("Login error:", error);
       }
     },
     
     
-  });
+  })    
+  
 
-  const selectLoginState = state => state.Login;
-  const LoginProperties = createSelector(selectLoginState, login => ({
-    error: login.error,
-  }));
-
-  const { error } = useSelector(LoginProperties);
 
   return (
     <React.Fragment>
@@ -123,12 +116,11 @@ const Login = props => {
                     <Form
                       className="form-horizontal"
                       onSubmit={e => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
+                        e.preventDefault()
+                        validation.handleSubmit()
+                        return false
                       }}
                     >
-                      {error ? <Alert color="danger">{error}</Alert> : null}
 
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
@@ -164,12 +156,14 @@ const Login = props => {
                           onBlur={validation.handleBlur}
                           value={validation.values.mobile || ""}
                           invalid={
-                            validation.touched.mobile && validation.errors.mobile
+                            validation.touched.mobile &&
+                            validation.errors.mobile
                               ? true
                               : false
                           }
                         />
-                        {validation.touched.mobile && validation.errors.mobile ? (
+                        {validation.touched.mobile &&
+                        validation.errors.mobile ? (
                           <FormFeedback type="invalid">
                             {validation.errors.mobile}
                           </FormFeedback>
@@ -250,11 +244,11 @@ const Login = props => {
         </Container>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default withRouter(Login);
+export default withRouter(Login)
 
 Login.propTypes = {
   history: PropTypes.object,
-};
+}
