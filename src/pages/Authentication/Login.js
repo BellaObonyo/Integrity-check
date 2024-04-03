@@ -63,7 +63,7 @@ const Login = props => {
         console.log("loginSuccess:", loginSuccess); 
         console.log("isAuthenticated:", isAuthenticated); 
         if (loginSuccess) {
-          navigate("/register"); 
+          navigate("/dashboard"); 
         } else {
           console.log("Login not successful"); 
         }
