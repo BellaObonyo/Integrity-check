@@ -9,7 +9,7 @@ import { withTranslation } from "react-i18next"
 
 const Dashboard = props => {
   //meta title
-  document.title = "Dashboard | SHOFCO - SUN Portal"
+  document.title = "Dashboard | CAK Portal"
 
   return (
     <React.Fragment>

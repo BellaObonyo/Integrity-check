@@ -56,28 +56,28 @@ const Login = props => {
       mobile: Yup.string().required("Please Enter Your Mobile"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
+
     onSubmit: async values => {
       try {
-        const response = await login(values); // Await login request
-        console.log(response); // Log the response
-        
-        // Check if login was successful
-        if (response && response.success) {
-          // Handle successful login, such as redirecting to a dashboard
-          navigate('/dashboard');
+        await login(values);
+        console.log("loginSuccess:", loginSuccess); 
+        console.log("isAuthenticated:", isAuthenticated); 
+        if (loginSuccess) {
+          navigate("/register"); 
         } else {
-          // Handle unsuccessful login, display error message
-          // You can set an error state or display an alert
-          console.error("Login failed:", response.error);
+          console.log("Login not successful"); 
         }
       } catch (error) {
         console.error("Login error:", error);
       }
     },
-    
-    
-  })    
-  
+
+  });
+
+  const selectLoginState = state => state.Login;
+  const LoginProperties = createSelector(selectLoginState, login => ({
+    error: login.error,
+  }));
 
 
   return (
@@ -181,13 +181,13 @@ const Login = props => {
                           onBlur={validation.handleBlur}
                           invalid={
                             validation.touched.password &&
-                            validation.errors.password
+                              validation.errors.password
                               ? true
                               : false
                           }
                         />
                         {validation.touched.password &&
-                        validation.errors.password ? (
+                          validation.errors.password ? (
                           <FormFeedback type="invalid">
                             {validation.errors.password}
                           </FormFeedback>

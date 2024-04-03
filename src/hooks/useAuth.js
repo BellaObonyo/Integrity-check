@@ -1,5 +1,5 @@
 import { loginApi, registerApi } from "api/auth"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext} from "react"
 import { useMutation, useQueryClient } from "react-query"
 import { StoreContext } from "./useStore"
 
