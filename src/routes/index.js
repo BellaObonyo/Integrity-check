@@ -17,6 +17,7 @@ import Dashboard from "../pages/Dashboard/index";
 import IncidentReport from "../pages/Incidents&Reports/IncidentReport";
 import IncidentDetails from "pages/Incidents&Reports/IncidentDetails";
 import Alerts from "pages/Alerts/Alerts";
+import Surveys from "pages/Surveys/Surveys";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
@@ -29,9 +30,14 @@ const authProtectedRoutes = [
     exact: true,
     component: <Navigate to="/dashboard" />,
   },
+
+
   { path: "/incidents", component: <IncidentReport /> },
   { path: "/incidents/:id", component: <IncidentDetails />},
   { path: "/alerts", component: <Alerts /> },
+  { path: "/surveys", component: <Surveys/> },
+
+
 
 ];
 
