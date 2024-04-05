@@ -16,13 +16,14 @@ import Dashboard from "../pages/Dashboard/index";
 // Pages
 import IncidentReport from "../pages/Incidents&Reports/IncidentReport";
 import IncidentDetails from "pages/Incidents&Reports/IncidentDetails";
+import Alerts from "pages/Alerts/Alerts";
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
-  // //profile
-  { path: "/profile", component: <UserProfile /> },
 
-  // this route should be at the end of all other routes
+
+  //profile
+  { path: "/profile", component: <UserProfile /> },
   {
     path: "/",
     exact: true,
@@ -30,6 +31,8 @@ const authProtectedRoutes = [
   },
   { path: "/incidents", component: <IncidentReport /> },
   { path: "/incidents/:id", component: <IncidentDetails />},
+  { path: "/alerts", component: <Alerts /> },
+
 ];
 
 const publicRoutes = [
