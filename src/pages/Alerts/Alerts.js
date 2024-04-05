@@ -6,7 +6,6 @@ const Alerts = () => {
     const [selectedStatus, setSelectedStatus] = useState(null);
 
     const handleFileUpload = (e) => {
-        // Handle file upload logic here
     };
 
     const statusOptions = ["New", "Open", "Closed"];

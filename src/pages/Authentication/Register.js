@@ -18,11 +18,9 @@ import * as Yup from "yup"
 import { useFormik } from "formik"
 
 // action
-import { registerUser, apiError } from "../../store/actions"
 
 //redux
-import { useSelector, useDispatch } from "react-redux"
-import { createSelector } from "reselect"
+import { useDispatch } from "react-redux"
 import { useAuth } from "hooks/useAuth"
 
 import { Link, useNavigate } from "react-router-dom"
@@ -48,7 +46,6 @@ const Register = props => {
   const navigate = useNavigate()
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
@@ -78,7 +75,6 @@ const Register = props => {
       preferredLanguage: Yup.string(),
     }),
     onSubmit: async values => {
-      // Format the dateOfBirth field to match the expected format
       const formattedValues = {
         ...values,
         dateOfBirth: new Date(values.dateOfBirth).toISOString(),
@@ -154,6 +150,8 @@ const Register = props => {
                           {registrationError.message}
                         </Alert>
                       ) : null}
+                      <Row>
+                        <Col>
 
                       <div className="mb-3">
                         <Label className="form-label">First Name</Label>
@@ -173,8 +171,9 @@ const Register = props => {
                           {validation.errors.firstName}
                         </FormFeedback>
                       </div>
-
-                      <div className="mb-3">
+                        </Col>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Middle Name</Label>
                         <Input
                           name="middleName"
@@ -192,8 +191,11 @@ const Register = props => {
                           {validation.errors.middleName}
                         </FormFeedback>
                       </div>
-
-                      <div className="mb-3">
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Last Name</Label>
                         <Input
                           name="lastName"
@@ -211,6 +213,30 @@ const Register = props => {
                           {validation.errors.lastName}
                         </FormFeedback>
                       </div>
+                        </Col>
+                        <Col>
+                        <div className="mb-3">
+                        <Label className="form-label">Last Name</Label>
+                        <Input
+                          name="lastName"
+                          value={validation.values.lastName || ""}
+                          type="text"
+                          placeholder="Enter your last name"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          invalid={
+                            validation.touched.lastName &&
+                            !!validation.errors.lastName
+                          }
+                        />
+                        <FormFeedback>
+                          {validation.errors.lastName}
+                        </FormFeedback>
+                      </div>
+                        </Col>
+                      </Row>
+                      <Row>
+                      <Col>
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
@@ -228,6 +254,8 @@ const Register = props => {
                         />
                         <FormFeedback>{validation.errors.email}</FormFeedback>
                       </div>
+                      </Col>
+                      <Col>
                       <div className="mb-3">
                         <Label className="form-label">Password</Label>
                         <Input
@@ -246,7 +274,11 @@ const Register = props => {
                           {validation.errors.password}
                         </FormFeedback>
                       </div>
-                      <div className="mb-3">
+                      </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Mobile Number</Label>
                         <Input
                           name="mobile"
@@ -262,8 +294,9 @@ const Register = props => {
                         />
                         <FormFeedback>{validation.errors.mobile}</FormFeedback>
                       </div>
-
-                      <div className="mb-3">
+                        </Col>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Date of Birth</Label>
                         <Input
                           name="dateOfBirth"
@@ -280,8 +313,11 @@ const Register = props => {
                           {validation.errors.dateOfBirth}
                         </FormFeedback>
                       </div>
-
-                      <div className="mb-3">
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Sex</Label>
                         <Input
                           type="select"
@@ -300,8 +336,9 @@ const Register = props => {
                         </Input>
                         <FormFeedback>{validation.errors.sex}</FormFeedback>
                       </div>
-
-                      <div className="mb-3">
+                        </Col>
+                        <Col>
+                        <div className="mb-3">
                         <Label className="form-label">Preferred Language</Label>
                         <Input
                           type="select"
@@ -321,10 +358,12 @@ const Register = props => {
                           {validation.errors.preferredLanguage}
                         </FormFeedback>
                       </div>
+                        </Col>
+                      </Row>
                       <div className="mt-3 d-grid">
                         <Button
                           block
-                          className="btn btn-primary btn-block "
+                          className="btn bg-primary btn-block "
                           type="submit"
                         >
                           Register
