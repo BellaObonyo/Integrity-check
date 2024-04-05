@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import withRouter from "components/Common/withRouter";
-import { logoutUser } from "../../store/actions";
 
 //redux
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "hooks/useAuth"; 
 
 const Logout = () => {
   const history = useNavigate();
   const dispatch = useDispatch();
 
+  const {logout} = useAuth()
+
   useEffect(() => {
-    dispatch(logoutUser(history));
-  }, [dispatch, history]);
+    logout();
+  }, []);
 
   return <></>;
 };

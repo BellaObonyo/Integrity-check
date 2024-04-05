@@ -45,13 +45,15 @@ function reducer(state, action) {
       state.loading = false;
       state.isAuthenticated = true;
       console.log(action?.payload);
-   
+      localStorage.setItem('sessionToken', action?.payload?.data.token);
+     
       return state;
     case 'loginFail':
       state.loading = false;
       return state;
     case 'currentUserSuccess':
       state.loading = false;
+      state.memberId = action?.payload?.memberId;
       localStorage.setItem('user', JSON.stringify(action?.payload));
       state.user = action?.payload;
       return state;
@@ -59,9 +61,11 @@ function reducer(state, action) {
       state.loading = false;
       return state;
     case 'logout':
+      console.log("TO LOG OUT")
       state.user = null;
       state.isAuthenticated = false;
-   
+      localStorage.removeItem('sessionToken');
+  
       return state;
     case 'setConfigs':
       state.configs = action.configs;

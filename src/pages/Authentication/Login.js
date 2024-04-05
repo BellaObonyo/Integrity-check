@@ -1,84 +1,85 @@
-import PropTypes from "prop-types"
-import React from "react"
-import { useNavigate } from "react-router-dom"
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
+import { Row, Col, CardBody, Card, Alert, Container, Form, Input, FormFeedback, Label } from "reactstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from 'hooks/useAuth';
 
-import {
-  Row,
-  Col,
-  CardBody,
-  Card,
-  Alert,
-  Container,
-  Form,
-  Input,
-  FormFeedback,
-  Label,
-} from "reactstrap"
-
-//redux
-import { useSelector, useDispatch } from "react-redux"
-import { createSelector } from "reselect"
-import { Link } from "react-router-dom"
-import withRouter from "components/Common/withRouter"
-import { useAuth } from "hooks/useAuth"
-
-// Formik validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
-
-// actions
-import { loginUser, socialLogin } from "../../store/actions"
-
-// import images
-import profile from "assets/images/profile-img.png"
-import logo from "assets/images/logo.svg"
+import withRouter from "components/Common/withRouter";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { loginUser, socialLogin } from "../../store/actions";
+import profile from "assets/images/profile-img.png";
+import logo from "assets/images/logo.svg";
 
 const Login = props => {
-  //meta title
-  document.title = "Login | CAK Admin Login"
+  document.title = "Login | SUN Welfare Member Portal";
 
-  const { isAuthenticated, login, loading, loginSuccess, loginError } =
-    useAuth()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  const { isAuthenticated,  login, loginError, loading } = useAuth();
 
-  const dispatch = useDispatch()
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$|^[0-9]{10}$/,
+        "Please enter a valid email or phone number"
+      )
+      .required("Please Enter Your Email"),
+    password: Yup.string().required("Please Enter Your Password"),
+    mobile: Yup.string().required("Enter Mobile Number")
+  });
 
   const validation = useFormik({
     enableReinitialize: true,
     initialValues: {
-      email: "",
-      mobile: "",
-      password: "",
+      email: '',
+      password: '',
+      mobile: '',
     },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-      mobile: Yup.string().required("Please Enter Your Mobile"),
-      password: Yup.string().required("Please Enter Your Password"),
-    }),
-
-    onSubmit: async values => {
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
       try {
-        await login(values);
-        console.log("loginSuccess:", loginSuccess); 
-        console.log("isAuthenticated:", isAuthenticated); 
-        if (loginSuccess) {
-          navigate("/register"); 
-        } else {
-          console.log("Login not successful"); 
+
+        let loginData = {
+          userName: values.email,
+          password: values.password,
+          mobile: values.mobile
         }
+
+        login(loginData);
+        console.log(loginData)
       } catch (error) {
-        console.error("Login error:", error);
+        console.error('Error during login:', error);
       }
     },
-
   });
 
-  const selectLoginState = state => state.Login;
-  const LoginProperties = createSelector(selectLoginState, login => ({
-    error: login.error,
-  }));
+  const selectLoginState = (state) => state.Login;
+  const LoginProperties = createSelector(
+    selectLoginState,
+    (login) => ({
+      error: login.error
+    })
+  );
 
+  const {
+    error
+  } = useSelector(LoginProperties);
+
+ 
+  useEffect(() => {
+    console.log(isAuthenticated)
+    if (isAuthenticated) {
+      navigate('/dashboard');
+      console.log(navigate('/dashboard')
+    )
+    
+    }
+  }, [isAuthenticated]);
 
   return (
     <React.Fragment>
@@ -87,13 +88,18 @@ const Login = props => {
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>
               <Card className="overflow-hidden">
-                <div className="bg-primary-subtle">
+                {/* <div className="bg-secondary-subtle"> */}
+                <div className="bg-primary">
                   <Row>
                     <Col className="col-7">
-                      <div className="text-primary p-4">
-                        <h5 className="text-primary">CAK Admin Portal</h5>
+                    {/* <div className="p-4"> */}
+                      <div className="p-4 text-white">
+                        <span className="font-size-14 fw-bolder">CAK Admin Portal</span>
                         <p>Sign in to continue.</p>
                       </div>
+                    </Col>
+                    <Col className="col-5 align-self-end">
+                      <img src={profile} alt="" className="img-fluid" />
                     </Col>
                   </Row>
                 </div>
@@ -115,58 +121,30 @@ const Login = props => {
                   <div className="p-2">
                     <Form
                       className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
                       }}
                     >
+                      {error ? <Alert color="danger">{error}</Alert> : null}
 
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
                           name="email"
                           className="form-control"
-                          placeholder="Enter email"
-                          type="email"
+                          placeholder="Enter Email"
+                          type="text"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email && validation.errors.email
-                              ? true
-                              : false
+                            validation.touched.email && validation.errors.email ? true : false
                           }
                         />
                         {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.email}
-                          </FormFeedback>
-                        ) : null}
-                      </div>
-
-                      <div className="mb-3">
-                        <Label className="form-label">Mobile</Label>
-                        <Input
-                          name="mobile"
-                          className="form-control"
-                          placeholder="Enter mobile"
-                          type="text"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.mobile || ""}
-                          invalid={
-                            validation.touched.mobile &&
-                            validation.errors.mobile
-                              ? true
-                              : false
-                          }
-                        />
-                        {validation.touched.mobile &&
-                        validation.errors.mobile ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.mobile}
-                          </FormFeedback>
+                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
                         ) : null}
                       </div>
 
@@ -180,17 +158,30 @@ const Login = props => {
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           invalid={
-                            validation.touched.password &&
-                              validation.errors.password
-                              ? true
-                              : false
+                            validation.touched.password && validation.errors.password ? true : false
                           }
                         />
-                        {validation.touched.password &&
-                          validation.errors.password ? (
-                          <FormFeedback type="invalid">
-                            {validation.errors.password}
-                          </FormFeedback>
+                        {validation.touched.password && validation.errors.password ? (
+                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Mobile</Label>
+                        <Input
+                          name="mobile"
+                          className="form-control"
+                          placeholder="Enter Mobile"
+                          type="text"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.mobile || ""}
+                          invalid={
+                            validation.touched.mobile && validation.errors.mobile ? true : false
+                          }
+                        />
+                        {validation.touched.mobile && validation.errors.mobile ? (
+                          <FormFeedback type="invalid">{validation.errors.mobile}</FormFeedback>
                         ) : null}
                       </div>
 
@@ -217,6 +208,8 @@ const Login = props => {
                         </button>
                       </div>
 
+               
+
                       <div className="mt-4 text-center">
                         <Link to="/forgot-password" className="text-muted">
                           <i className="mdi mdi-lock me-1" />
@@ -224,16 +217,10 @@ const Login = props => {
                         </Link>
                       </div>
                       <div className="mt-4 text-center">
-                        <p>
-                          Don&#39;t have an account ?{" "}
-                          <Link
-                            to="/register"
-                            className="fw-medium text-primary"
-                          >
-                            {" "}
-                            Signup now{" "}
-                          </Link>{" "}
-                        </p>
+                        <Link to="/register" className="text-muted">
+                          <i className="mdi mdi-account-plus me-1" />
+                          Don't have an Account? Register
+                        </Link>
                       </div>
                     </Form>
                   </div>
@@ -244,11 +231,11 @@ const Login = props => {
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default withRouter(Login)
+export default withRouter(Login);
 
 Login.propTypes = {
   history: PropTypes.object,
-}
+};
