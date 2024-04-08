@@ -20,8 +20,8 @@ const navigate = useNavigate();
   }, []);
 
   const [pagination, setPagination] = useState({
-    pageSize: 10,
-    pageNumber: 1,
+    pageSize: 100,
+    pageNumber: 0,
   });
 
   const { mutate: mutateIncidents } = useMutation(
@@ -105,3 +105,5 @@ const navigate = useNavigate();
 };
 
 export default Index;
+
+
