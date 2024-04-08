@@ -6,6 +6,7 @@ import BarChart from "./barChart"
 import DonutChart from "./donutchart"
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 import { withTranslation } from "react-i18next"
+import { getIncidents } from "api/incidents";
 
 const Dashboard = props => {
   //meta title
@@ -20,8 +21,6 @@ const Dashboard = props => {
             <Col md={12}>
               <Breadcrumbs
                 header={props.t("Dashboard")}
-                title={props.t("Incidents")}
-                breadcrumbItem={props.t("Dashboard")}
               />
             </Col>
           </Row>
