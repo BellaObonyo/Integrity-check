@@ -11,7 +11,7 @@ import TableContainer from "../../components/Common/TableContainer";
 import { useMutation } from 'react-query';
 import { getIncidents } from "api/incidents";
 
-const IncidentReport = () => {
+const Index = () => {
   // Set meta title
   React.useEffect(() => {
     document.title = "Incident | CAK Portal";
@@ -87,7 +87,7 @@ const IncidentReport = () => {
 
           <TableContainer
             showView
-            handleView={handleViewDetails}
+            // handleView={handleViewDetails}
             columns={columns}
             data={incidentsData}
             isGlobalFilter={true}
@@ -106,4 +106,4 @@ const IncidentReport = () => {
   );
 };
 
-export default IncidentReport;
+export default Index;

@@ -14,7 +14,7 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword";
 import Dashboard from "../pages/Dashboard/index";
 
 // Pages
-import IncidentReport from "../pages/Incidents&Reports/IncidentReport";
+import Index from "pages/Incidents&Reports";
 import IncidentDetails from "pages/Incidents&Reports/IncidentDetails";
 import Alerts from "pages/Alerts/Alerts";
 import Surveys from "pages/Surveys/Surveys";
@@ -32,7 +32,7 @@ const authProtectedRoutes = [
   },
 
 
-  { path: "/incidents", component: <IncidentReport /> },
+  { path: "/incidents", component: <Index /> },
   { path: "/incidents/:id", component: <IncidentDetails />},
   { path: "/alerts", component: <Alerts /> },
   { path: "/surveys", component: <Surveys/> },
