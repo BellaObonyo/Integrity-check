@@ -14,12 +14,13 @@ import {
   DropdownMenu,
 } from "reactstrap"
 
-import classnames from "classnames"
-import { Link } from "react-router-dom"
+import { getIncident } from "api/incidents"
+import { useParams } from "react-router-dom";
 
 //Import Breadcrumb
 import Breadcrumbs from "../../components/Common/Breadcrumb"
 import { Button } from "reactstrap"
+import profile from "assets/images/profile-img.png";
 
 const IncidentDetails = () => {
   const [settingsMenu, setSettingsMenu] = useState(false)
@@ -27,12 +28,31 @@ const IncidentDetails = () => {
 
   //meta title
   document.title = "Incident | Details"
+  
+  const { id } = useParams();
+
+  const [ incidentData, setIncidentData ] = useState({});
+
+  useEffect(() => {
+    const fetchIncidentDetails = async () => {
+      try {
+        const response = await getIncident(id);
+        setIncidentData(response.data);
+        console.log(response)
+        
+      } catch (error) {
+        console.error('Error fetching incident details:', error);
+      }
+    };
+
+    fetchIncidentDetails();
+  }, [id]);
 
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Breadcrumbs title="Groups" breadcrumbItem="Incident Details" />
+          <Breadcrumbs title="Incident" breadcrumbItem="Incident Details" />
 
           <Row>
             <Card>
@@ -71,7 +91,7 @@ const IncidentDetails = () => {
                     </Dropdown>
                   </Col>
                   <Col xs="1">
-                    <p className="bg-danger p-2">Vulnerability Incident</p>
+                    <p className="bg-danger p-2">{incidentData.incidentType}</p>
                   </Col>
                   <Col className="d-flex justify-content-end align-items-center">
                     <Button className="me-2 bg-success">
@@ -109,44 +129,48 @@ const IncidentDetails = () => {
                       <tbody>
                         <>
                           <tr>
-                            <th scope="row">Subject</th>
-                            <td>Malicious Code Outbreak</td>
+                            <th scope="row">#</th>
+                            <td>{incidentData.id}</td>
                           </tr>
                           <tr>
-                            <th scope="row">Names</th>
-                            <td>Anonymous</td>
+                            <th scope="row">Name</th>
+                            <td>{incidentData.name}</td>
                           </tr>
                           <tr>
-                            <th scope="row">Mobile</th>
-                            <td>Anonymous</td>
+                            <th scope="row">Report Type</th>
+                            <td>{incidentData.reportType}</td>
                           </tr>
                           <tr>
-                            <th scope="row">Email</th>
-                            <td>anonymous@me.com</td>
+                            <th scope="row">Description</th>
+                            <td>{incidentData.description}</td>
                           </tr>
                           <tr>
-                            <th scope="row">Target of Attack IP address</th>
-                            <td>192.156.23.23</td>
+                            <th scope="row">Place</th>
+                            <td>{incidentData.place}</td>
                           </tr>
                           <tr>
-                            <th scope="row">DNS Name</th>
-                            <td>me.mycode.com</td>
+                            <th scope="row">Other Information</th>
+                            <td>{incidentData.otherinfo}</td>
                           </tr>
                           <tr>
-                            <th scope="row">TCP/UDP Port</th>
-                            <td>42</td>
+                            <th scope="row">Date</th>
+                            <td>{incidentData.dateTime}</td>
                           </tr>
                           <tr>
-                            <th scope="row">Source of Attack IP Address</th>
-                            <td>72.19.204.12</td>
+                            <th scope="row">Deleted</th>
+                            <td>{incidentData.deleted}</td>
                           </tr>
                           <tr>
-                            <th scope="row">DNS Name</th>
-                            <td>me.mycode.com</td>
+                            <th scope="row">User ID</th>
+                            <td>{incidentData.userId}</td>
                           </tr>
                           <tr>
-                            <th scope="row">TCP/UDP Port</th>
-                            <td>41</td>
+                            <th scope="row">Reporter</th>
+                            <td>{incidentData.reporter}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Victim</th>
+                            <td>{incidentData.victim}</td>
                           </tr>
                         </>
                       </tbody>
@@ -162,7 +186,7 @@ const IncidentDetails = () => {
                   <div className="flex-grow-1">
                     <div className="d-flex justify-content-center align-items-center h-100">
                       <img
-                        // src={avatar1}
+                        src={profile}
                         alt=""
                         className="img-thumbnail w-100 h-100" 
                         style={{ objectFit: "cover" }} 

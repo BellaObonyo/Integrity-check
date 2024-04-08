@@ -28,7 +28,7 @@ const navigate = useNavigate();
     () => getIncidents(pagination.pageNumber, pagination.pageSize),
     {
       onSuccess: res => {
-        console.log(res);
+        // console.log(res);
         setIncidentsData(res.data); 
       },
       onSettled: () => {
@@ -69,7 +69,7 @@ const navigate = useNavigate();
   );
 
   const handleViewDetails = (record) => {
-    console.log(record);
+    // console.log(record);
     navigate(`/incidents/${record.original.id}`);
   };
 
