@@ -3,16 +3,18 @@ import {
   Row,
   Container,
   Col,
-  Card,
-  CardBody,
 } from "reactstrap";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import TableContainer from "../../components/Common/TableContainer";
 import { useMutation } from 'react-query';
 import { getIncidents } from "api/incidents";
+import { useNavigate } from "react-router-dom";
+
+
 
 const Index = () => {
-  // Set meta title
+const navigate = useNavigate();
+
   React.useEffect(() => {
     document.title = "Incident | CAK Portal";
   }, []);
@@ -27,7 +29,7 @@ const Index = () => {
     {
       onSuccess: res => {
         console.log(res);
-        setIncidentsData(res.data); // Set only the data portion of the response
+        setIncidentsData(res.data); 
       },
       onSettled: () => {
         // queryClient.invalidateQueries('get-all-dependents');
@@ -39,9 +41,7 @@ const Index = () => {
     mutateIncidents({ ...pagination });
   }, [pagination]);
 
-  // State to hold the incidents data for display in the table
   const [incidentsData, setIncidentsData] = useState([]);
-
   const columns = useMemo(
     () => [
       {
@@ -68,26 +68,22 @@ const Index = () => {
     []
   );
 
+  const handleViewDetails = (record) => {
+    console.log(record);
+    navigate(`/incidents/${record.original.id}`);
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* Breadcrumb Row */}
           <Row>
             <Col>
               <Breadcrumbs title="Incidents" breadcrumbItem="IncidentReport" />
             </Col>
           </Row>
-
-          <Card>
-            <CardBody>
-              {/* Your card body content */}
-            </CardBody>
-          </Card>
-
           <TableContainer
             showView
-            // handleView={handleViewDetails}
             columns={columns}
             data={incidentsData}
             isGlobalFilter={true}
@@ -99,6 +95,8 @@ const Index = () => {
             theadClass="table-light"
             paginationDiv="col-12"
             pagination="justify-content-left pagination pagination-rounded"
+            handleView={handleViewDetails}
+
           />
         </Container>
       </div>
