@@ -7,10 +7,10 @@ const Footer = () => {
       <footer className="footer">
         <Container fluid={true}>
           <Row>
-            <Col md={6}>{new Date().getFullYear()} © CAK.</Col>
+            <Col md={6}>{new Date().getFullYear()} © Crypt.</Col>
             <Col md={6}>
               <div className="text-sm-end d-none d-sm-block">
-                Designed & Develop by Themesbrand
+              Designed & Developed by IntegrationofCrycpt
               </div>
             </Col>
           </Row>

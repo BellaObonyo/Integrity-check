@@ -8,7 +8,7 @@ const DonutChart = ({ dataColors }) => {
   const series = [44, 55];
 
   const options = {
-    labels: ["Anonymous", "Non-Anonymous"],
+    labels: ["Authorized", "Unauthorized"],
     colors: donutApexChartColors,
     legend: {
       show: true,

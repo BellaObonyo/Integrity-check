@@ -94,7 +94,7 @@ const Login = props => {
                     <Col className="col-7">
                     {/* <div className="p-4"> */}
                       <div className="p-4 text-white">
-                        <span className="font-size-14 fw-bolder">CAK Admin Portal</span>
+                        <span className="font-size-14 fw-bolder">Intergrity Check Portal</span>
                         <p>Sign in to continue.</p>
                       </div>
                     </Col>

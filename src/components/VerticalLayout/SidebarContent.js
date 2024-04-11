@@ -152,31 +152,33 @@ const SidebarContent = props => {
             </li>
 
             <li>
-              <Link to="/incidents">
-                <i className=" bx bxs-error"></i>
-                <span>{props.t("Incidents")}</span>
+              <Link to="/#">
+                <i className="bx bxs-pie-chart"></i>
+                <span>{props.t("Statistics")}</span>
+              </Link>
+            </li>
+            
+            <li>
+              <Link to="/#">
+                <i className="bx bxs-network-chart"></i>
+                <span>{props.t("System Monitoring")}</span>
               </Link>
             </li>
 
             <li>
-              <Link to="/alerts">
-                <i className="bx bxs-bell-ring"></i>
-                <span>{props.t("Alerts & History")}</span>
+              <Link to="/#">
+                <i className=" bx bxs-lock"></i>
+                <span>{props.t("Security Settings")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/#">
+                <i className="bx bxs-data"></i>
+                <span>{props.t("Authorization & Configuration")}</span>
               </Link>
             </li>
 
-            <li>
-              <Link to="/learningCenter">
-                <i className="bx bxs-book-open"></i>
-                <span>{props.t("Learning Center")}</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/Surveys">
-                <i className="bx bxs-file"></i>
-                <span>{props.t("Feedback & Surveys")}</span>
-              </Link>
-            </li>
+          
           </ul>
         </div>
       </SimpleBar>

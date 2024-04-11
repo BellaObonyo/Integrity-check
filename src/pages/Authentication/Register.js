@@ -1,94 +1,75 @@
-import React, { useEffect } from "react"
-import {
-  Row,
-  Col,
-  CardBody,
-  Card,
-  Alert,
-  Container,
-  Input,
-  Label,
-  Form,
-  FormFeedback,
-  Button,
-} from "reactstrap"
+import React, { useEffect } from "react";
+import { Row, Col, CardBody, Card, Alert, Container, Input, Label, Form, FormFeedback } from "reactstrap";
 
 // Formik Validation
-import * as Yup from "yup"
-import { useFormik } from "formik"
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 // action
+import { registerUser, apiError } from "../../store/actions";
 
 //redux
-import { useDispatch } from "react-redux"
-import { useAuth } from "hooks/useAuth"
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
 
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 
 // import images
-import profileImg from "../../assets/images/profile-img.png"
-import logoImg from "../../assets/images/logo.svg"
-import { reset } from "redux-form"
+import profileImg from "../../assets/images/profile-img.png";
+import logoImg from "../../assets/images/logo.svg";
 
 const Register = props => {
+
   //meta title
-  document.title = "Register | CAK Admin Portal"
+  document.title = "Register | Skote - React Admin & Dashboard Template";
 
-  const {
-    isAuthenticated,
-    register,
-    loading,
-    registerSuccess,
-    registrationError,
-  } = useAuth()
-
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validation = useFormik({
+    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
-      password: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      mobile: "",
-      dateOfBirth: "",
-      sex: "",
-      preferredLanguage: "",
+      email: '',
+      username: '',
+      password: '',
     },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email("Please enter a valid email address")
-        .required("Email is required"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
-        .required("Password is required"),
-      firstName: Yup.string().required("First name is required"),
-      middleName: Yup.string(),
-      lastName: Yup.string().required("Last name is required"),
-      mobile: Yup.string().required("Mobile number is required"),
-      dateOfBirth: Yup.date().required("Date of birth is required"),
-      sex: Yup.string().required("Sex is required"),
-      preferredLanguage: Yup.string(),
+      email: Yup.string().required("Please Enter Your Email"),
+      username: Yup.string().required("Please Enter Your Username"),
+      password: Yup.string().required("Please Enter Your Password"),
     }),
-    onSubmit: async values => {
-      const formattedValues = {
-        ...values,
-        dateOfBirth: new Date(values.dateOfBirth).toISOString(),
-        sex: values.sex.toUpperCase(),
-        preferredLanguage: values.preferredLanguage.toUpperCase(),
-      }
+    onSubmit: (values) => {
+      dispatch(registerUser(values));
+    }
+  });
 
-      await register(formattedValues).then(() => {
-        console.log(formattedValues)
-        validation.resetForm()
-        navigate('/login')
-      })
-    },
-  })
+
+  const selectAccountState = (state) => state.Account;
+  const AccountProperties = createSelector(
+    selectAccountState,
+    (account) => ({
+      user: account.user,
+      registrationError: account.registrationError,
+      success: account.success
+      // loading: account.loading,
+    })
+  );
+
+  const {
+    user,
+    registrationError, success
+    // loading
+  } = useSelector(AccountProperties);
+
+  useEffect(() => {
+    dispatch(apiError(""));
+  }, []);
+
+useEffect(() => {
+  success && setTimeout(() => navigate("/login"), 2000)
+}, [success])
 
   return (
     <React.Fragment>
@@ -106,8 +87,8 @@ const Register = props => {
                   <Row>
                     <Col className="col-7">
                       <div className="text-primary p-4">
-                        <h5 className="text-primary">Register</h5>
-                        <p>Get your CAK Admin account now.</p>
+                      <h5 className="text-primary">Register Here</h5>
+                        <p>Register for an account now.</p>
                       </div>
                     </Col>
                     <Col className="col-5 align-self-end">
@@ -133,264 +114,117 @@ const Register = props => {
                   <div className="p-2">
                     <Form
                       className="form-horizontal"
-                      onSubmit={e => {
-                        e.preventDefault()
-                        validation.handleSubmit()
-                        return false
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        validation.handleSubmit();
+                        return false;
                       }}
                     >
-                      {registerSuccess && (
+                      {user && user ? (
                         <Alert color="success">
                           Register User Successfully
                         </Alert>
-                      )}
-
-                      {registrationError && registrationError.message ? (
-                        <Alert color="danger">
-                          {registrationError.message}
-                        </Alert>
                       ) : null}
-                      <Row>
-                        <Col>
 
-                      <div className="mb-3">
-                        <Label className="form-label">First Name</Label>
-                        <Input
-                          name="firstName"
-                          value={validation.values.firstName || ""}
-                          type="text"
-                          placeholder="Enter your first name"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.firstName &&
-                            !!validation.errors.firstName
-                          }
-                        />
-                        <FormFeedback>
-                          {validation.errors.firstName}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Middle Name</Label>
-                        <Input
-                          name="middleName"
-                          value={validation.values.middleName || ""}
-                          type="text"
-                          placeholder="Enter your middle name"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.middleName &&
-                            !!validation.errors.middleName
-                          }
-                        />
-                        <FormFeedback>
-                          {validation.errors.middleName}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Last Name</Label>
-                        <Input
-                          name="lastName"
-                          value={validation.values.lastName || ""}
-                          type="text"
-                          placeholder="Enter your last name"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.lastName &&
-                            !!validation.errors.lastName
-                          }
-                        />
-                        <FormFeedback>
-                          {validation.errors.lastName}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Last Name</Label>
-                        <Input
-                          name="lastName"
-                          value={validation.values.lastName || ""}
-                          type="text"
-                          placeholder="Enter your last name"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.lastName &&
-                            !!validation.errors.lastName
-                          }
-                        />
-                        <FormFeedback>
-                          {validation.errors.lastName}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                      <Col>
+                      {registrationError && registrationError ? (
+                        <Alert color="danger">{registrationError}</Alert>
+                      ) : null}
+
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
+                          id="email"
                           name="email"
                           className="form-control"
-                          placeholder="Enter your email address"
+                          placeholder="Enter email"
                           type="email"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
                           value={validation.values.email || ""}
                           invalid={
-                            validation.touched.email &&
-                            !!validation.errors.email
+                            validation.touched.email && validation.errors.email ? true : false
                           }
                         />
-                        <FormFeedback>{validation.errors.email}</FormFeedback>
+                        {validation.touched.email && validation.errors.email ? (
+                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
+                        ) : null}
                       </div>
-                      </Col>
-                      <Col>
+
+                      <div className="mb-3">
+                        <Label className="form-label">Username</Label>
+                        <Input
+                          name="username"
+                          type="text"
+                          placeholder="Enter username"
+                          onChange={validation.handleChange}
+                          onBlur={validation.handleBlur}
+                          value={validation.values.username || ""}
+                          invalid={
+                            validation.touched.username && validation.errors.username ? true : false
+                          }
+                        />
+                        {validation.touched.username && validation.errors.username ? (
+                          <FormFeedback type="invalid">{validation.errors.username}</FormFeedback>
+                        ) : null}
+                      </div>
                       <div className="mb-3">
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
-                          value={validation.values.password || ""}
                           type="password"
                           placeholder="Enter Password"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
+                          value={validation.values.password || ""}
                           invalid={
-                            validation.touched.password &&
-                            !!validation.errors.password
+                            validation.touched.password && validation.errors.password ? true : false
                           }
                         />
-                        <FormFeedback>
-                          {validation.errors.password}
-                        </FormFeedback>
+                        {validation.touched.password && validation.errors.password ? (
+                          <FormFeedback type="invalid">{validation.errors.password}</FormFeedback>
+                        ) : null}
                       </div>
-                      </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Mobile Number</Label>
-                        <Input
-                          name="mobile"
-                          value={validation.values.mobile || ""}
-                          type="text"
-                          placeholder="Enter your mobile number"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.mobile &&
-                            !!validation.errors.mobile
-                          }
-                        />
-                        <FormFeedback>{validation.errors.mobile}</FormFeedback>
-                      </div>
-                        </Col>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Date of Birth</Label>
-                        <Input
-                          name="dateOfBirth"
-                          value={validation.values.dateOfBirth || ""}
-                          type="date"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.dateOfBirth &&
-                            !!validation.errors.dateOfBirth
-                          }
-                        />
-                        <FormFeedback>
-                          {validation.errors.dateOfBirth}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Sex</Label>
-                        <Input
-                          type="select"
-                          name="sex"
-                          value={validation.values.sex || ""}
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.sex && !!validation.errors.sex
-                          }
-                        >
-                          <option value="">Select sex</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="other">Other</option>
-                        </Input>
-                        <FormFeedback>{validation.errors.sex}</FormFeedback>
-                      </div>
-                        </Col>
-                        <Col>
-                        <div className="mb-3">
-                        <Label className="form-label">Preferred Language</Label>
-                        <Input
-                          type="select"
-                          name="preferredLanguage"
-                          value={validation.values.preferredLanguage || ""}
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          invalid={
-                            validation.touched.preferredLanguage && !!validation.errors.preferredLanguage
-                          }
-                        >
-                          <option value="">Select Preferred Language</option>
-                          <option value="english">English</option>
-                          <option value="kiswahili">Kiswahili</option>
-                        </Input>
-                        <FormFeedback>
-                          {validation.errors.preferredLanguage}
-                        </FormFeedback>
-                      </div>
-                        </Col>
-                      </Row>
-                      <div className="mt-3 d-grid">
-                        <Button
-                          block
-                          className="btn bg-primary btn-block "
+
+                      <div className="mt-4">
+                        <button
+                          className="btn btn-primary btn-block "
                           type="submit"
                         >
                           Register
-                        </Button>
+                        </button>
                       </div>
+
                       <div className="mt-4 text-center">
-                        <p>
-                          Already have an account ?{" "}
-                          <Link
-                            to="/login"
-                            className="font-weight-medium text-primary"
-                          >
-                            {" "}
-                            Login
-                          </Link>{" "}
+                        <p className="mb-0">
+                          By registering you agree to the Crypt{" "}
+                          <Link to="#" className="text-primary">
+                            Terms of Use
+                          </Link>
                         </p>
                       </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
+              <div className="mt-5 text-center">
+                <p>
+                  Already have an account ?{" "}
+                  <Link to="/login" className="font-weight-medium text-primary">
+                    {" "}
+                    Login
+                  </Link>{" "}
+                </p>
+                <p>
+                  © {new Date().getFullYear()} Crypt. Crafted with{" "}
+                  <i className="mdi mdi-heart text-danger" /> by CryptIntergration
+                </p>
+              </div>
             </Col>
           </Row>
         </Container>
       </div>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
