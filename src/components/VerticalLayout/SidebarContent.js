@@ -157,7 +157,7 @@ const SidebarContent = props => {
                 <span>{props.t("Statistics")}</span>
               </Link>
             </li>
-            
+
             <li>
               <Link to="/#">
                 <i className="bx bxs-network-chart"></i>
@@ -174,11 +174,38 @@ const SidebarContent = props => {
             <li>
               <Link to="/#">
                 <i className="bx bxs-data"></i>
-                <span>{props.t("Authorization & Configuration")}</span>
+                <span>{props.t("Authorization ")}</span>
+              </Link>
+            </li>
+            <li className="menu-title">{props.t("CONFIGURATION PANEL")}</li>
+            <li>
+              <Link to="/#" className="has-arrow">
+                <i className="bx bx-user"></i>
+                <span>{props.t("User Management")}</span>
+              </Link>
+              <ul className="sub-menu">
+                <li>
+                  <Link to="/users">{props.t("Users")}</Link>
+                </li>
+                <li>
+                  <Link to="/roles">{props.t("Roles")}</Link>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <Link to="/settings" >
+                <i className="bx bx-cog"></i>
+                <span>{props.t("Settings")}</span>
               </Link>
             </li>
 
-          
+            <li>
+              <Link to="/audit-logs" >
+                <i className="bx bx-list-check"></i>
+                <span>{props.t("Audit Logs")}</span>
+              </Link>
+            </li>
+
           </ul>
         </div>
       </SimpleBar>
