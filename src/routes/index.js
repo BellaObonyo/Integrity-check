@@ -11,13 +11,19 @@ import ForgetPwd from "../pages/Authentication/ForgetPassword";
 
 // Dashboard
 import Dashboard from "../pages/Dashboard/index";
+import FileManager from "../pages/FileManager/index";
+// import Statistics from "pages/Statistics";
 
 // Pages
 
 const authProtectedRoutes = [
   { path: "/dashboard", component: <Dashboard /> },
+  { path: "/apps-filemanager", component: <FileManager /> },
+  // { path: "/statistics", component: <Statistics /> },
 
 
+
+   
   //profile
   {
     path: "/",

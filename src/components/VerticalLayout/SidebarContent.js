@@ -150,21 +150,18 @@ const SidebarContent = props => {
                 <span>{props.t("Dashboard")}</span>
               </Link>
             </li>
-
             <li>
-              <Link to="/#">
+              <Link to="/apps-filemanager" >
+                <i className="bx bx-file"></i>
+                <span>{props.t("File Manager")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/statistics">
                 <i className="bx bxs-pie-chart"></i>
                 <span>{props.t("Statistics")}</span>
               </Link>
             </li>
-
-            <li>
-              <Link to="/#">
-                <i className="bx bxs-network-chart"></i>
-                <span>{props.t("System Monitoring")}</span>
-              </Link>
-            </li>
-
             <li>
               <Link to="/#">
                 <i className=" bx bxs-lock"></i>
