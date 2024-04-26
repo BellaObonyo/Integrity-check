@@ -1,60 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Row, Col, Alert, Card, CardBody, Container, FormFeedback, Input, Label, Form } from "reactstrap";
-
-//redux
-import { useSelector, useDispatch } from "react-redux";
-import { createSelector } from "reselect";
+import { Row, Col,Form, Card, CardBody, Container, Input, Label } from "reactstrap";
 import { Link } from "react-router-dom";
 import withRouter from "components/Common/withRouter";
-
-// Formik Validation
-import * as Yup from "yup";
-import { useFormik } from "formik";
-
-// action
-import { userForgetPassword } from "../../store/actions";
-
-// import images
-import profile from "../../assets/images/profile-img.png";
 import logo from "../../assets/images/logo.svg";
 
-const ForgetPasswordPage = props => {
-
-  //meta title
+const ForgetPasswordPage = (props) => {
   document.title = "Forget Password | Skote - React Admin & Dashboard Template";
-
-  const dispatch = useDispatch();
-
-  const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
-    enableReinitialize: true,
-
-    initialValues: {
-      email: '',
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().required("Please Enter Your Email"),
-    }),
-    onSubmit: (values) => {
-      dispatch(userForgetPassword(values, props.history));
-    }
-  });
-
-
-  const selectForgotPasswordState = (state) => state.ForgetPassword;
-    const ForgotPasswordProperties = createSelector(
-      selectForgotPasswordState,
-        (forgetPassword) => ({
-          forgetError: forgetPassword.forgetError,
-          forgetSuccessMsg: forgetPassword.forgetSuccessMsg,
-        })
-    );
-
-    const {
-      forgetError,
-      forgetSuccessMsg
-  } = useSelector(ForgotPasswordProperties);    
 
   return (
     <React.Fragment>
@@ -68,54 +20,18 @@ const ForgetPasswordPage = props => {
           <Row className="justify-content-center">
             <Col md={8} lg={6} xl={5}>
               <Card className="overflow-hidden">
-                <div className="bg-primary-subtle">
-                  <Row>
-                    <Col xs={7}>
-                      <div className="text-primary p-4">
-                        <h5 className="text-primary">Welcome Back !</h5>
-                        <p>Sign in to continue to Skote.</p>
-                      </div>
-                    </Col>
-                    <Col className="col-5 align-self-end">
-                      <img src={profile} alt="" className="img-fluid" />
-                    </Col>
-                  </Row>
-                </div>
                 <CardBody className="pt-0">
                   <div>
                     <Link to="/">
                       <div className="avatar-md profile-user-wid mb-4">
                         <span className="avatar-title rounded-circle bg-light">
-                          <img
-                            src={logo}
-                            alt=""
-                            className="rounded-circle"
-                            height="34"
-                          />
+                          <img src={logo} alt="" className="rounded-circle" height="34" />
                         </span>
                       </div>
                     </Link>
                   </div>
                   <div className="p-2">
-                    {forgetError && forgetError ? (
-                      <Alert color="danger" style={{ marginTop: "13px" }}>
-                        {forgetError}
-                      </Alert>
-                    ) : null}
-                    {forgetSuccessMsg ? (
-                      <Alert color="success" style={{ marginTop: "13px" }}>
-                        {forgetSuccessMsg}
-                      </Alert>
-                    ) : null}
-
-                    <Form
-                      className="form-horizontal"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        validation.handleSubmit();
-                        return false;
-                      }}
-                    >
+                    <Form className="form-horizontal">
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
@@ -123,23 +39,11 @@ const ForgetPasswordPage = props => {
                           className="form-control"
                           placeholder="Enter email"
                           type="email"
-                          onChange={validation.handleChange}
-                          onBlur={validation.handleBlur}
-                          value={validation.values.email || ""}
-                          invalid={
-                            validation.touched.email && validation.errors.email ? true : false
-                          }
                         />
-                        {validation.touched.email && validation.errors.email ? (
-                          <FormFeedback type="invalid">{validation.errors.email}</FormFeedback>
-                        ) : null}
                       </div>
                       <Row className="mb-3">
                         <Col className="text-end">
-                          <button
-                            className="btn btn-primary w-md "
-                            type="submit"
-                          >
+                          <button className="btn btn-primary w-md " type="submit">
                             Reset
                           </button>
                         </Col>

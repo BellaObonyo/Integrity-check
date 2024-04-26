@@ -27,7 +27,6 @@ const Register = props => {
   const navigate = useNavigate();
 
   const validation = useFormik({
-    // enableReinitialize : use this flag when initial values needs to be changed
     enableReinitialize: true,
 
     initialValues: {
@@ -53,7 +52,6 @@ const Register = props => {
       user: account.user,
       registrationError: account.registrationError,
       success: account.success
-      // loading: account.loading,
     })
   );
 
